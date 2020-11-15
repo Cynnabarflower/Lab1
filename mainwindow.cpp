@@ -39,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent)
         Protein protein2 = Protein();
         protein2.loadFromFile(fname.toUtf8().begin());
         protein = protein + protein2;
-        ui->pushButton_2->setEnabled(protein.size() > 0);
+        ui->pushButton_2->setEnabled(protein.size() > 0 && ui->spinBox->value() <= protein.size());
 
         clearLayout(ui->verticalLayout_3);
 
@@ -50,6 +50,11 @@ MainWindow::MainWindow(QWidget *parent)
         }
     });
 
+    connect(ui->pushButton_5, &QPushButton::clicked, this, [this](){
+        protein.clear();
+        clearLayout(ui->verticalLayout_3);
+    });
+
     connect(ui->lineEdit, SIGNAL(textChanged(QString)), this, SLOT(textChanged()));
 
     connect(ui->spinBox, SIGNAL(valueChanged(int)), this, SLOT(posChanged()));
@@ -58,7 +63,7 @@ MainWindow::MainWindow(QWidget *parent)
         protein.remove(ui->spinBox->value() - 1);
         auto c = ui->verticalLayout_3->takeAt(ui->spinBox->value() - 1)->layout();
         ui->spinBox->setMaximum(protein.size()+1);
-        ui->pushButton_2->setEnabled(protein.size() > 0);
+        ui->pushButton_2->setEnabled(protein.size() > 0 && ui->spinBox->value() <= protein.size());
 
         QLayoutItem *item;
         QWidget *widget;
@@ -94,7 +99,7 @@ MainWindow::MainWindow(QWidget *parent)
 
         }
 
-        ui->pushButton_2->setEnabled(protein.size() > 0);
+        ui->pushButton_2->setEnabled(protein.size() > 0 && ui->spinBox->value() <= protein.size());
         addAcidLayout(a, pos);
 
    });
@@ -126,7 +131,7 @@ void MainWindow::textChanged()
 
 void MainWindow::posChanged()
 {
-//    ui->pushButton_2->setEnabled(ui->spinBox->value() > 0);
+    ui->pushButton_2->setEnabled(protein.size() > 0 && ui->spinBox->value() <= protein.size());
 }
 
 void MainWindow::addAcidLayout(const Acid *a, int pos) {
@@ -138,7 +143,7 @@ void MainWindow::addAcidLayout(const Acid *a, int pos) {
     remove->setVisible(false);
     index.append(ui->verticalLayout_3->count());
     connect(remove, &QPushButton::clicked, this, [this, a, c](){
-        ui->pushButton_2->setEnabled(protein.size() > 0);
+        ui->pushButton_2->setEnabled(protein.size() > 0 && ui->spinBox->value() <= protein.size());
         ui->spinBox->setMaximum(protein.size()+1);
         QLayoutItem *item;
         QWidget *widget;

@@ -10,38 +10,16 @@ size_t constexpr MAX_SIZE = 100000;
 
 void printLinkedList(const Protein &list_) {
     bool first = true;
+    int counter = 0;
     for (const auto& element : list_) {
         if (!first) {
-            std::cout << ", ";
+            std::cout << "; ";
         }
+        std::cout << counter++ << " ";
         first = false;
         std::cout << element->toString();
     }
     std::cout << std::endl;
-}
-
-std::ostream& operator<<(std::ostream& stream_, Protein& list_) {
-    uint64_t s = list_.size();
-    stream_.write(reinterpret_cast<char*>(&s), sizeof(s));
-    for (uint64_t i = 0; i < s; ++i) {
-        std::string s = list_[i]->toString();
-        stream_.write(&s[0], sizeof(s));
-    }
-    return stream_;
-}
-std::istream& operator>>(std::istream& stream_, Protein& list_) {
-    list_.clear();
-    uint64_t s{0};
-    stream_.read(reinterpret_cast<char*>(&s), sizeof(s));
-    if (s > MAX_SIZE) {
-        return stream_;
-    }
-    for (uint64_t i = 0; i < s; ++i) {
-        int32_t n{0};
-      //  stream_.read(reinterpret_cast<char*>(&n), sizeof(n));
-     //   list_.pushBack(n);
-    }
-    return stream_;
 }
 
 Protein::Protein(size_t n_) {
@@ -338,7 +316,7 @@ Protein::Iterator Protein::Iterator::operator++(int) {
 }
 
 
-int Protein::saveToFile(const std::string &filename) {
+int Protein::saveToFile(const std::string &filename) const {
 
     QFile data(QString::fromStdString(filename));
     if (data.open(QFile::WriteOnly | QFile::Truncate)) {

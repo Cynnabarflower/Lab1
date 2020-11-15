@@ -26,14 +26,11 @@ public:
     bool operator==(const Protein& other_) const;
     bool operator!=(const Protein& other_) const;
     int loadFromFile(const std::string &filename);
-    int saveToFile(const std::string &filename);
+    int saveToFile(const std::string &filename) const;
     void remove(Acid *a);
     void remove(int pos);
-    void removeAll();
     void insert(Acid* element_, int i);
     friend Protein operator+(const Protein& a, const Protein& b);
-    friend std::ostream& operator<<(std::ostream& stream_, Protein& list_);
-    friend std::istream& operator>>(std::istream& stream_, Protein& list_);
 private:
     class ElementWrapper {
     public:
@@ -65,7 +62,5 @@ private:
 };
 
 void printLinkedList(const Protein& list_);
-std::ostream& operator<<(std::ostream& stream_, Protein& list_);
-std::istream& operator>>(std::istream& stream_, Protein& list_);
 
 #endif // LINKEDLIST_H

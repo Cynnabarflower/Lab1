@@ -22,7 +22,7 @@ public:
     virtual std::string toString() const;
 
 private:
-    char shortName = '.';
+    char shortName = ' ';
 };
 
 

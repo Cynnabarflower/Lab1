@@ -54,6 +54,9 @@ int main(int argc, char *argv[])
 
     assert(p == p4);
 
+    assert(p + Protein() == p4);
+    assert(Protein() + p == p4);
+
     p.saveToFile("file1.txt");
 
     auto p5 = Protein();
@@ -66,8 +69,8 @@ int main(int argc, char *argv[])
     std::cout << "Well done!" << std::endl;
 
 
-//    QApplication a(argc, argv);
-//    MainWindow w;
-//    w.show();
-//    return a.exec();
+    QApplication a(argc, argv);
+    MainWindow w;
+    w.show();
+    return a.exec();
 }
