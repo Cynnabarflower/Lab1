@@ -20,7 +20,7 @@ public:
     void popBack();
     void popFront();
     size_t size() const;
-    Acid*& operator[](size_t n_) const;
+    Acid* const & operator[](size_t n_) const;
     Acid*& operator[](size_t n_);
     void clear();
     bool operator==(const Protein& other_) const;
@@ -49,7 +49,7 @@ public:
         bool operator!=(const Iterator& other_);
         Iterator operator++(int);
         Iterator& operator++();
-        const Acid* operator*();
+        Acid* operator*();
     };
     Iterator begin();
     Iterator end();

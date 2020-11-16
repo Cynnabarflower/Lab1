@@ -52,8 +52,8 @@ void Protein::pushBack(Acid* element_) {
         m_first = new ElementWrapper(element_);
         m_last = m_first;
     } else {
-        assert(m_last->right == nullptr);
-        m_last = (m_last->right = new ElementWrapper(element_, m_last, nullptr));
+        assert(m_last->next == nullptr);
+        m_last = (m_last->next = new ElementWrapper(element_, m_last, nullptr));
     }
     ++m_size;
 }
@@ -65,8 +65,8 @@ void Protein::pushFront(Acid* element_) {
         m_first = new ElementWrapper(element_);
         m_last = m_first;
     } else {
-        assert(m_first->left == nullptr);
-        m_first = (m_first->left = new ElementWrapper(element_, nullptr, m_first));
+        assert(m_first->prev == nullptr);
+        m_first = (m_first->prev = new ElementWrapper(element_, nullptr, m_first));
     }
     ++m_size;
 }
@@ -83,18 +83,18 @@ void Protein::insert( Acid* element_, int pos) {
     ElementWrapper *temp = new ElementWrapper(element_, nullptr, nullptr);
     int counter = 0;
     auto p = m_first;
-    while (counter < pos && p->right != nullptr) {
-        p = p->right;
+    while (counter < pos && p->next != nullptr) {
+        p = p->next;
         counter++;
     }
 
-    if (p->left != nullptr) {
-       temp->left = p->left;
-       p->left->right = temp;
+    if (p->prev != nullptr) {
+       temp->prev = p->prev;
+       p->prev->next = temp;
     }
 
-    temp->right = p;
-    p->left = temp;
+    temp->next = p;
+    p->prev = temp;
 
     if (m_first == p) {
         m_first = temp;
@@ -107,19 +107,19 @@ void Protein::insert( Acid* element_, int pos) {
 void Protein::remove(Acid *a) {
 
     auto p = m_first;
-    while (p->element != a && p->right != nullptr) {
-        p = p->right;
+    while (p->element != a && p->next != nullptr) {
+        p = p->next;
     }
     assert(p == nullptr);
 
-    if (p->left)
-        p->left->right = p->right;
-    if (p->right)
-        p->right->left = p->left;
+    if (p->prev)
+        p->prev->next = p->next;
+    if (p->next)
+        p->next->prev = p->prev;
     if (m_first == p)
-        m_first = p->right;
+        m_first = p->next;
     if (m_last == p)
-        m_last = p->left;
+        m_last = p->prev;
     delete p;
 
     --m_size;
@@ -141,19 +141,19 @@ void Protein::remove(int pos) {
     }
     int counter = 0;
     auto p = m_first;
-    while (counter < pos && p->right != nullptr) {
-        p = p->right;
+    while (counter < pos && p->next != nullptr) {
+        p = p->next;
         counter++;
     }
 
-    if (p->left)
-        p->left->right = p->right;
-    if (p->right)
-        p->right->left = p->left;
+    if (p->prev)
+        p->prev->next = p->next;
+    if (p->next)
+        p->next->prev = p->prev;
     if (m_first == p)
-        m_first = p->right;
+        m_first = p->next;
     if (m_last == p)
-        m_last = p->left;
+        m_last = p->prev;
     delete p;
 
     --m_size;
@@ -168,15 +168,15 @@ void Protein::popBack() {
         return;
     }
     if (m_first == m_last) {
-        assert(m_first->left == nullptr);
-        assert(m_first->right == nullptr);
+        assert(m_first->prev == nullptr);
+        assert(m_first->next == nullptr);
         assert(m_size == 1);
         delete m_first;
         m_first = (m_last = nullptr);
     } else {
         auto tmp = m_last;
-        m_last = m_last->left;
-        m_last->right = nullptr;
+        m_last = m_last->prev;
+        m_last->next = nullptr;
         delete tmp;
     }
     --m_size;
@@ -189,15 +189,15 @@ void Protein::popFront() {
         return;
     }
     if (m_first == m_last) {
-        assert(m_first->left == nullptr);
-        assert(m_first->right == nullptr);
+        assert(m_first->prev == nullptr);
+        assert(m_first->next == nullptr);
         assert(m_size == 1);
         delete m_first;
         m_first = (m_last = nullptr);
     } else {
         auto tmp = m_first;
-        m_first = m_first->right;
-        m_first->left = nullptr;
+        m_first = m_first->next;
+        m_first->prev = nullptr;
         delete tmp;
     }
     --m_size;
@@ -206,7 +206,6 @@ void Protein::popFront() {
 size_t Protein::size() const { return m_size; }
 
 Acid*& Protein::operator[](size_t n_) {
-    //return const_cast<Element&>(const_cast<const LinkedList&>(*this)[n_]);
     if (n_ >= m_size) {
         throw std::out_of_range("n_ >= m_size");
     }
@@ -214,7 +213,7 @@ Acid*& Protein::operator[](size_t n_) {
     assert(tmp != nullptr);
     for (size_t i = 0; i < n_; ++i) {
         assert(tmp != nullptr);
-        tmp = tmp->right;
+        tmp = tmp->next;
     }
     return tmp->element;
 }
@@ -230,7 +229,7 @@ void Protein::clear() {
     for (size_t i = 0; i < m_size; ++i) {
         assert(tmp != nullptr);
         auto tmp2 = tmp;
-        tmp = tmp->right;
+        tmp = tmp->next;
         delete tmp2;
     }
     m_first = m_last = nullptr;
@@ -272,7 +271,7 @@ Protein::Iterator Protein::end() const {
     return nullptr;
 }
 
-Acid*& Protein::operator[](size_t n_) const {
+Acid* const & Protein::operator[](size_t n_) const {
     return const_cast<Protein&>(*this)[n_];
 }
 
@@ -288,7 +287,7 @@ Protein &Protein::operator=(const Protein &other_) {
 }
 
 Protein::ElementWrapper::ElementWrapper(Acid*& element_, Protein::ElementWrapper *left_, Protein::ElementWrapper *right_) :
-    element{element_}, left{left_}, right{right_} {
+    element{element_}, prev{left_}, next{right_} {
     this->element = element_;
 }
 
@@ -303,13 +302,13 @@ Protein::Iterator& Protein::Iterator::operator++() {
     return *this;
 }
 
-const Acid *Protein::Iterator::operator*() {
+Acid* Protein::Iterator::operator*() {
     return element->element;
 }
 
 Protein::Iterator Protein::Iterator::operator++(int) {
     auto retVal = *this;
-    element = element->right;
+    element = element->next;
     return retVal;
 }
 
@@ -368,26 +367,26 @@ Protein operator+(const Protein &a, const Protein &b) {
                    if (*q->element != *t->element) {
                        break;
                    }
-                   t = t->right;
-                   q = q -> right;
+                   t = t->next;
+                   q = q -> next;
                }
                if (q == nullptr) {
                        Protein result = Protein(a);
                        while(t) {
                            result.pushBack(t->element);
-                           t = t -> right;
+                           t = t -> next;
                        }
                        return result;
                }
            }
-           p = p->right;
+           p = p->next;
 
        }
        auto from = b.m_first;
        Protein result = Protein(a);
        while(from) {
            result.pushBack(from->element);
-           from = from -> right;
+           from = from -> next;
        }
        return result;
 

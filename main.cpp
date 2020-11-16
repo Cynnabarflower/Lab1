@@ -67,11 +67,18 @@ int main(int argc, char *argv[])
 
     p[0]->setName("Z");
 
+
     assert(p[0] != p5[0]);
 
     p5[0]->setName("Z");
 
     assert(p[0] != p5[0]);
+
+    for (auto a : p)
+        a->setName("Name");
+
+    for (auto a : p)
+        assert(a->getName() == "Name");
 
 
     std::cout << "Well done!" << std::endl;
