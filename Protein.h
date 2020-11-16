@@ -10,18 +10,18 @@
 
 class Protein {
 public:
-    Protein(size_t n_ = 0);
+    Protein();
     Protein(const Protein& other_);
     ~Protein() { clear(); };
     Protein& operator=(const Protein& other_);
     Protein& operator=(Protein&& other_);
-    void pushBack(const Acid *element_);
-    void pushFront(const Acid *element_);
+    void pushBack(Acid* element_);
+    void pushFront(Acid* element_);
     void popBack();
     void popFront();
     size_t size() const;
-    const Acid* operator[](size_t n_) const;
-    const Acid* operator[](size_t n_);
+    Acid*& operator[](size_t n_) const;
+    Acid*& operator[](size_t n_);
     void clear();
     bool operator==(const Protein& other_) const;
     bool operator!=(const Protein& other_) const;
@@ -34,10 +34,10 @@ public:
 private:
     class ElementWrapper {
     public:
-        ElementWrapper(const Acid* element_,
+        ElementWrapper(Acid*& element_,
                        ElementWrapper* left_ = nullptr,
                        ElementWrapper* right_ = nullptr);
-        const Acid* element;
+        Acid* element;
         ElementWrapper* left{nullptr};
         ElementWrapper* right{nullptr};
     };

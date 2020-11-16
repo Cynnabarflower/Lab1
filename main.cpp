@@ -65,6 +65,14 @@ int main(int argc, char *argv[])
 
     assert(p == p5);
 
+    p[0]->setName("Z");
+
+    assert(p[0] != p5[0]);
+
+    p5[0]->setName("Z");
+
+    assert(p[0] != p5[0]);
+
 
     std::cout << "Well done!" << std::endl;
 

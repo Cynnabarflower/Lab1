@@ -13,12 +13,10 @@ void Acid::setName(const std::string &name) {
 }
 
 bool Acid::operator==(const Acid &b) const {
-
     return !(*this != b);
 }
 
 bool Acid::operator!=(const Acid &b) const {
     return toString() != b.toString();
 }
-
 

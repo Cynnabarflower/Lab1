@@ -22,10 +22,8 @@ void printLinkedList(const Protein &list_) {
     std::cout << std::endl;
 }
 
-Protein::Protein(size_t n_) {
-    for (size_t i = 0; i < n_; ++i) {
-        pushBack(nullptr);
-    }
+Protein::Protein() {
+    this->m_size = 0;
 }
 
 Protein::Protein(const Protein &other_) {
@@ -47,7 +45,7 @@ Protein &Protein::operator=(Protein &&other_) {
     return *this;
 }
 
-void Protein::pushBack(const Acid *element_) {
+void Protein::pushBack(Acid* element_) {
     if (m_last == nullptr) {
         assert(m_size == 0);
         assert(m_first == nullptr);
@@ -60,7 +58,7 @@ void Protein::pushBack(const Acid *element_) {
     ++m_size;
 }
 
-void Protein::pushFront(const Acid *element_) {
+void Protein::pushFront(Acid* element_) {
     if (m_last == nullptr) {
         assert(m_size == 0);
         assert(m_first == nullptr);
@@ -207,7 +205,7 @@ void Protein::popFront() {
 
 size_t Protein::size() const { return m_size; }
 
-const Acid *Protein::operator[](size_t n_) {
+Acid*& Protein::operator[](size_t n_) {
     //return const_cast<Element&>(const_cast<const LinkedList&>(*this)[n_]);
     if (n_ >= m_size) {
         throw std::out_of_range("n_ >= m_size");
@@ -274,7 +272,7 @@ Protein::Iterator Protein::end() const {
     return nullptr;
 }
 
-const Acid *Protein::operator[](size_t n_) const {
+Acid*& Protein::operator[](size_t n_) const {
     return const_cast<Protein&>(*this)[n_];
 }
 
@@ -289,7 +287,7 @@ Protein &Protein::operator=(const Protein &other_) {
     return *this;
 }
 
-Protein::ElementWrapper::ElementWrapper(const Acid *element_, Protein::ElementWrapper *left_, Protein::ElementWrapper *right_) :
+Protein::ElementWrapper::ElementWrapper(Acid*& element_, Protein::ElementWrapper *left_, Protein::ElementWrapper *right_) :
     element{element_}, left{left_}, right{right_} {
     this->element = element_;
 }
@@ -363,7 +361,7 @@ Protein operator+(const Protein &a, const Protein &b) {
 
        auto p = a.m_first;
        while (p != nullptr) {
-           if (*p->element == *b.m_first->element) {
+           if (p->element->operator==(*b.m_first->element)) {
                auto q = p;
                auto t = b.m_first;
                while (q != nullptr) {

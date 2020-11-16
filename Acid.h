@@ -14,10 +14,6 @@ public:
 
     void setName(const std::string &name);
 
-    bool operator==(const Acid &b);
-
-    bool operator!=(const Acid &b);
-
     virtual std::string toString() const = 0;
 
     bool operator==(const Acid& other_) const;
