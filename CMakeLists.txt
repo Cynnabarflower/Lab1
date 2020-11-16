@@ -48,9 +48,6 @@ else()
     Acid.h
     Protein.cpp
     Protein.h
-    myiterator.cpp
-    myiterator.h
-    node.h
   )
 endif()
 
