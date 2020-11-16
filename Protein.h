@@ -38,8 +38,8 @@ private:
                        ElementWrapper* left_ = nullptr,
                        ElementWrapper* right_ = nullptr);
         Acid* element;
-        ElementWrapper* left{nullptr};
-        ElementWrapper* right{nullptr};
+        ElementWrapper* prev{nullptr};
+        ElementWrapper* next{nullptr};
     };
 public:
     class Iterator {
